@@ -20,6 +20,7 @@ namespace ShortestPathGame.Classes
         public int result;
 
         AdjacencyList[] graph = new AdjacencyList[MAX_VERTICES];
+        int[] weights = new int[22];
 
         public GraphDrawUtil(Canvas myCanvas)
         {
@@ -42,6 +43,7 @@ namespace ShortestPathGame.Classes
                     CreateLine(points[i], points[i - 1]);
                     GraphCreator.Push(ref graph[i-1], i, rand);
                     GraphCreator.Push(ref graph[i], i-1, rand);
+                    weights[amountOfLines - 1] = rand; 
                 }
 
                 if (i >= 5)
@@ -49,6 +51,7 @@ namespace ShortestPathGame.Classes
                     CreateLine(points[i], points[i-5]);
                     GraphCreator.Push(ref graph[i-5], i, rand);
                     GraphCreator.Push(ref graph[i], i - 5, rand);
+                    weights[amountOfLines - 1] = rand;
                 }
             } 
  
@@ -60,12 +63,6 @@ namespace ShortestPathGame.Classes
             }
 
             ChangeColorOfTwoRandomVertices(graph);
-
-            int[] weights = new int[22];
-            for (int j = MAX_VERTICES-1, i = 0; j >= 0; j--)
-            {
-                //implement receiving data
-            }
 
             for (int i = lines.Length - 1; i >= 0; i--)
             {
