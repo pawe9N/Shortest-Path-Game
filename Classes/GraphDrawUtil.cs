@@ -12,15 +12,20 @@ namespace ShortestPathGame.Classes
         private Canvas myCanvas;
         private Point[] points = new Point[MAX_VERTICES];
         private Border[] vertices = new Border[MAX_VERTICES];
-        private Line[] lines = new Line[MAX_VERTICES*MAX_VERTICES];
-        private string[] lineText = new string[MAX_VERTICES* MAX_VERTICES];
+        private Line[] lines = new Line[22];
+        private string[] lineText = new string[22];
         private int amountOfVertices = 0;
         private int amountOfLines = 0;
+
+        public int result;
+
+        AdjacencyList[] graph = new AdjacencyList[MAX_VERTICES];
 
         public GraphDrawUtil(Canvas myCanvas)
         {
             this.myCanvas = myCanvas;
 
+            Random rnd = new Random();
             for (int i = 0, x = 50, y = 20; i < MAX_VERTICES; i++, x+=150)
             {
                 if (x > 650)
@@ -31,32 +36,22 @@ namespace ShortestPathGame.Classes
 
                 points[i] = new Point(x, y);
 
+                int rand = rnd.Next(1, 11);
                 if (i > 0 && i%5 != 0)
                 {
                     CreateLine(points[i], points[i - 1]);
+                    GraphCreator.Push(ref graph[i-1], i, rand);
+                    GraphCreator.Push(ref graph[i], i-1, rand);
                 }
 
                 if (i >= 5)
                 {
                     CreateLine(points[i], points[i-5]);
+                    GraphCreator.Push(ref graph[i-5], i, rand);
+                    GraphCreator.Push(ref graph[i], i - 5, rand);
                 }
-            }
-
-            Random rnd = new Random();
-            foreach (Line line in lines)
-            {
-                int rand = rnd.Next(1, 11);
-                if (line != null)
-                {
-                    AddText(line, rand.ToString());
-                } 
-                else
-                {
-                    break;
-                }
-            }
-
-            
+            } 
+ 
             char symbol = 'A';
             for (int i = 0; i < MAX_VERTICES; i++)
             {
@@ -64,7 +59,21 @@ namespace ShortestPathGame.Classes
                 symbol++;
             }
 
-            ChangeColorOfTwoRandomVertices();
+            ChangeColorOfTwoRandomVertices(graph);
+
+            int[] weights = new int[22];
+            for (int j = MAX_VERTICES-1, i = 0; j >= 0; j--)
+            {
+                //implement receiving data
+            }
+
+            for (int i = lines.Length - 1; i >= 0; i--)
+            {
+                if (lines[i] != null)
+                {
+                    AddText(lines[i], weights[i].ToString());
+                }
+            }
         }
 
         private void CreateLine(Point p1, Point p2)
@@ -91,13 +100,20 @@ namespace ShortestPathGame.Classes
             vertices[c2].Background = Brushes.LightGreen;
         }
 
-        private void ChangeColorOfTwoRandomVertices()
+        private void ChangeColorOfTwoRandomVertices(AdjacencyList[] graph)
         {
             Random rnd = new Random();
-            int randomVertex = rnd.Next(1, MAX_VERTICES);
-            vertices[randomVertex].Background = Brushes.LightGreen;
-            randomVertex = rnd.Next(1, MAX_VERTICES);
-            vertices[randomVertex].Background = Brushes.LightGreen;
+            int randomVertex1 = rnd.Next(0, MAX_VERTICES - 1);
+            vertices[randomVertex1].Background = Brushes.LightGreen;
+            int randomVertex2;
+            do
+            {
+                randomVertex2 = rnd.Next(0, MAX_VERTICES - 1);
+            } while (randomVertex2 == randomVertex1);
+            
+            vertices[randomVertex2].Background = Brushes.LightGreen;
+
+            result = DjikstraShortestPath.Solve(graph, randomVertex1, randomVertex2, MAX_VERTICES);
         }
 
         private void AddText(Line l, string text)

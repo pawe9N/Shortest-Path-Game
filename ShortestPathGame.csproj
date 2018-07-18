@@ -62,7 +62,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\AdjacencyList.cs" />
+    <Compile Include="Classes\DjikstraShortestPath.cs" />
+    <Compile Include="Classes\GraphCreator.cs" />
     <Compile Include="Classes\GraphDrawUtil.cs" />
+    <Compile Include="Classes\MinHeap.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

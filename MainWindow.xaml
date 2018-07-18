@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShortestPathGame"
         mc:Ignorable="d"
-        Title="ShortestPathGame" Height="450" Width="800">
+        Title="ShortestPathGame" Height="600" Width="800">
 
     <Grid>
-        <Canvas Name="myCanvas" Width="800" Height="400">
+        <Canvas Name="myCanvas" Width="800" Height="400"  VerticalAlignment="Top">
         </Canvas>
+        <Grid Width="800" Height="200" VerticalAlignment="Bottom">
+            <TextBlock Name="Result" Text="Result:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>
 

@@ -26,6 +26,7 @@ namespace ShortestPathGame
             InitializeComponent();
 
             GraphDrawUtil util = new GraphDrawUtil(myCanvas);
+            Result.Text = util.result.ToString();
         }  
     }
 }
