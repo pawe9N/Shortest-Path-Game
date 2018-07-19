@@ -17,6 +17,7 @@ namespace ShortestPathGame.Classes
         private int ROWS_OF_VERTICES;
         private int MAX_LINES;
         private int MARGIN_LEFT;
+        private int MARGIN_TOP;
         private int PADDING_LEFT;
 
         private Point[] points;
@@ -38,21 +39,22 @@ namespace ShortestPathGame.Classes
 
             switch (level)
             {
-                case 1: Initialize(3, 3, 220, 160); break;
-                case 2: Initialize(4, 3, 120, 170); break;
-                case 3: Initialize(5, 3, 70, 150); break;
-                case 4: Initialize(4, 4, 200, 120); break;
-                case 5: Initialize(5, 4, 140, 120); break;
+                case 1: Initialize(3, 3, 120, 40, 160); break;
+                case 2: Initialize(4, 3, 25, 30, 170); break;
+                case 3: Initialize(5, 3, 5, 50, 138); break;
+                case 4: Initialize(4, 4, 100, 20, 120); break;
+                case 5: Initialize(5, 4, 40, 20, 120); break;
             }
 
             MakeAndDrawGraph();
         }
-        
-        private void Initialize(int VERTICES_IN_ROW, int ROWS_OF_VERTICES, int MARGIN_LEFT, int PADDING_LEFT)
+
+        private void Initialize(int VERTICES_IN_ROW, int ROWS_OF_VERTICES, int MARGIN_LEFT, int MARGIN_TOP, int PADDING_LEFT)
         {         
             this.VERTICES_IN_ROW = VERTICES_IN_ROW;
             this.ROWS_OF_VERTICES = ROWS_OF_VERTICES;
             this.MARGIN_LEFT = MARGIN_LEFT;
+            this.MARGIN_TOP = MARGIN_TOP;
             this.PADDING_LEFT = PADDING_LEFT;
             MAX_VERTICES = VERTICES_IN_ROW* ROWS_OF_VERTICES;
             MAX_LINES = MAX_VERTICES - ROWS_OF_VERTICES + MAX_VERTICES - VERTICES_IN_ROW;
@@ -72,7 +74,7 @@ namespace ShortestPathGame.Classes
         private void MakeAndDrawGraph()
         {
             Random rnd = new Random();
-            for (int i = 0, x = MARGIN_LEFT, y = 20; i < MAX_VERTICES; i++, x += PADDING_LEFT)
+            for (int i = 0, x = MARGIN_LEFT, y = MARGIN_TOP; i < MAX_VERTICES; i++, x += PADDING_LEFT)
             {
                 if (x > MARGIN_LEFT + (VERTICES_IN_ROW - 1) * PADDING_LEFT)
                 {
@@ -136,32 +138,30 @@ namespace ShortestPathGame.Classes
 
         private void ChangeColor(int c1, int c2)
         {
-            //l.Stroke = new SolidColorBrush(Colors.LightGreen);
-
             foreach(Line line in lines)
             {
                 if((points[c1].X+15 == line.X1 && points[c1].Y+15 == line.Y1 && points[c2].X + 15 == line.X2 && points[c2].Y + 15 == line.Y2)
                     || (points[c1].X + 15 == line.X2 && points[c1].Y + 15 == line.Y2 && points[c2].X + 15 == line.X1 && points[c2].Y + 15 == line.Y1))
                 {
-                    line.Stroke = new SolidColorBrush(Colors.Blue);
+                    line.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
                 }
             }
 
-            vertices[c1].Background = Brushes.Blue;
-            vertices[c2].Background = Brushes.Blue;
+            vertices[c1].Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
+            vertices[c2].Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
         }
 
         private void InitializeDjikstraAlgorithmWithRandomVerticles(AdjacencyList[] graph)
         {
             Random rnd = new Random();
             from = rnd.Next(0, MAX_VERTICES - 1);
-            vertices[from].Background = Brushes.LightGreen;
+            vertices[from].Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
             do
             {
                 where = rnd.Next(0, MAX_VERTICES - 1);
             } while (where == from);
             
-            vertices[where].Background = Brushes.LightGreen;
+            vertices[where].Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
 
             result = DjikstraShortestPath.Solve(graph, from, where, MAX_VERTICES, parent);
         }

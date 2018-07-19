@@ -1,5 +1,6 @@
 ﻿using ShortestPathGame.Classes;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -32,24 +33,46 @@ namespace ShortestPathGame
             Check.IsEnabled = true;
             Next.IsEnabled = false;
             AnserChecker.Text = "";
-            Result.Text = "";
+            Result.Text = "_____";
             Answer.Text = "";
 
             myCanvas.Children.Clear();
 
-            if(++level > 5)
-            {
-                level = 1;
-            }
+            CheckPointsToNextLevel();
 
             util = new GraphDrawUtil(myCanvas, level);
             result = util.result;
             Points.Text = $"Points: {points}";
         }
 
+        private void CheckPointsToNextLevel()
+        {
+            if(points < 50)
+            {
+                level = 1;
+            }
+            else if(points < 100)
+            {
+                level = 2;
+            }
+            else if (points < 200)
+            {
+                level = 3;
+            }
+            else if (points < 400)
+            {
+                level = 4;
+            }
+            else if (points >= 400)
+            {
+                level = 5;
+            }
+        }
+
         private void Check_Click(object sender, RoutedEventArgs e)
         {
-            if(Answer.Text != "" && result == Convert.ToInt32(Answer.Text))
+            string answerString = Regex.Match(Answer.Text, @"\d+").Value;
+            if (answerString != "" && result == Int32.Parse(answerString))
             {
                 util.ColorPath();
                 AnserChecker.Text = ":)";
@@ -61,9 +84,13 @@ namespace ShortestPathGame
                 Next.IsEnabled = true;
                 Next.Focus();
             }
-            else
+            else if(answerString != "")
             {
-                points -= 10;
+                Answer.Text = "";
+                if(points > 0)
+                {
+                    points -= 10;
+                }
                 AnserChecker.Text = ":(";
                 Points.Text = $"Points: {points}";
             }
