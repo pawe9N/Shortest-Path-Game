@@ -5,14 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShortestPathGame"
         mc:Ignorable="d"
-        Title="ShortestPathGame" Height="600" Width="800">
+        Title="ShortestPathGame" Height="720" Width="800">
 
-    <Grid>
-        <Canvas Name="myCanvas" Width="800" Height="400"  VerticalAlignment="Top">
+    <StackPanel>
+        <Canvas Name="myCanvas" Width="800" Height="450"  VerticalAlignment="Top">
         </Canvas>
-        <Grid Width="800" Height="200" VerticalAlignment="Bottom">
-            <TextBlock Name="Result" Text="Result:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid Width="200" Height="40">
+            <TextBlock Name="Points" Text="Points:" Width="150" Height="40" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30,0,0,0"/>
         </Grid>
-    </Grid>
+        <Grid Width="800" Height="200" VerticalAlignment="Bottom">
+            <Line X1="0" X2="800" Height="10" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <TextBox Name="Answer" Width="400" Height="40" VerticalAlignment="Top" Margin="200,30,200,0" BorderBrush="Black" BorderThickness="1" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+            <Button Name="Check" Width="50" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 30, 120,0" Content="?" FontSize="25" Click="Check_Click" Grid.Column="1"/>
+            <TextBlock Name="AnserChecker" Width="31" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,60,0" Text="" FontSize="30"  FontWeight="Bold" Grid.Column="1"/>
+            <TextBlock Name="Result" Text="Result:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 10,0,0" FontSize="30" FontWeight="Bold"/>
+            <Button Name="Next" Content="NEXT" Width="200" Height="40" VerticalAlignment="Bottom" Margin="0,0,0,20" FontSize="20" Click="Next_Click" Grid.ColumnSpan="2"/>
+        </Grid>
+    </StackPanel>
 </Window>
 

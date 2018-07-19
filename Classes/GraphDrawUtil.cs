@@ -8,53 +8,96 @@ namespace ShortestPathGame.Classes
 {
     class GraphDrawUtil
     {
-        private const int MAX_VERTICES = 15;
-        private Canvas myCanvas;
-        private Point[] points = new Point[MAX_VERTICES];
-        private Border[] vertices = new Border[MAX_VERTICES];
-        private Line[] lines = new Line[22];
-        private string[] lineText = new string[22];
-        private int amountOfVertices = 0;
-        private int amountOfLines = 0;
-
         public int result;
+        private Canvas myCanvas;
+        
+        private int MAX_VERTICES;
+        private int VERTICES_IN_ROW;
+        private int ROWS_OF_VERTICES;
+        private int MAX_LINES;
+        private int MARGIN_LEFT;
+        private int PADDING_LEFT;
 
-        AdjacencyList[] graph = new AdjacencyList[MAX_VERTICES];
-        int[] weights = new int[22];
+        private Point[] points;
+        private Border[] vertices;
+        private Line[] lines;
+        private AdjacencyList[] graph;
+        private string[] lineText;
+        private int[] weights;
 
-        public GraphDrawUtil(Canvas myCanvas)
+        private int amountOfVertices;
+        private int amountOfLines;
+
+
+        public GraphDrawUtil(Canvas myCanvas, int level)
         {
             this.myCanvas = myCanvas;
 
-            Random rnd = new Random();
-            for (int i = 0, x = 50, y = 20; i < MAX_VERTICES; i++, x+=150)
+            switch(level)
             {
-                if (x > 650)
+                case 1: Initialize(3, 3, 220, 160); break;
+                case 2: Initialize(4, 3, 120, 170); break;
+                case 3: Initialize(5, 3, 70, 150); break;
+                case 4: Initialize(4, 4, 200, 120); break;
+                case 5: Initialize(5, 4, 140, 120); break;
+            }
+
+            MakeAndDrawGraph();         
+        }
+        
+        private void Initialize(int VERTICES_IN_ROW, int ROWS_OF_VERTICES, int MARGIN_LEFT, int PADDING_LEFT)
+        {
+            
+            this.VERTICES_IN_ROW = VERTICES_IN_ROW;
+            this.ROWS_OF_VERTICES = ROWS_OF_VERTICES;
+            this.MARGIN_LEFT = MARGIN_LEFT;
+            this.PADDING_LEFT = PADDING_LEFT;
+            MAX_VERTICES = VERTICES_IN_ROW* ROWS_OF_VERTICES;
+            MAX_LINES = MAX_VERTICES - ROWS_OF_VERTICES + MAX_VERTICES - VERTICES_IN_ROW;
+
+            points = new Point[MAX_VERTICES];
+            vertices = new Border[MAX_VERTICES];
+            lines = new Line[MAX_LINES];
+            lineText = new string[MAX_LINES];
+            graph = new AdjacencyList[MAX_VERTICES];
+            weights = new int[MAX_LINES];
+
+            amountOfVertices = 0;
+            amountOfLines = 0;
+        }
+
+        private void MakeAndDrawGraph()
+        {
+            Random rnd = new Random();
+            for (int i = 0, x = MARGIN_LEFT, y = 20; i < MAX_VERTICES; i++, x += PADDING_LEFT)
+            {
+                if (x > MARGIN_LEFT + (VERTICES_IN_ROW - 1) * PADDING_LEFT)
                 {
-                    y += 150;
-                    x = 50;
+                    y += PADDING_LEFT;
+                    x = MARGIN_LEFT;
                 }
 
                 points[i] = new Point(x, y);
 
                 int rand = rnd.Next(1, 11);
-                if (i > 0 && i%5 != 0)
+                if (i > 0 && i % VERTICES_IN_ROW != 0)
                 {
                     CreateLine(points[i], points[i - 1]);
-                    GraphCreator.Push(ref graph[i-1], i, rand);
-                    GraphCreator.Push(ref graph[i], i-1, rand);
-                    weights[amountOfLines - 1] = rand; 
-                }
-
-                if (i >= 5)
-                {
-                    CreateLine(points[i], points[i-5]);
-                    GraphCreator.Push(ref graph[i-5], i, rand);
-                    GraphCreator.Push(ref graph[i], i - 5, rand);
+                    GraphCreator.Push(ref graph[i - 1], i, rand);
+                    GraphCreator.Push(ref graph[i], i - 1, rand);
                     weights[amountOfLines - 1] = rand;
                 }
-            } 
- 
+
+                rand = rnd.Next(1, 11);
+                if (i >= VERTICES_IN_ROW)
+                {
+                    CreateLine(points[i], points[i - VERTICES_IN_ROW]);
+                    GraphCreator.Push(ref graph[i - VERTICES_IN_ROW], i, rand);
+                    GraphCreator.Push(ref graph[i], i - VERTICES_IN_ROW, rand);
+                    weights[amountOfLines - 1] = rand;
+                }
+            }
+
             char symbol = 'A';
             for (int i = 0; i < MAX_VERTICES; i++)
             {
@@ -100,17 +143,17 @@ namespace ShortestPathGame.Classes
         private void ChangeColorOfTwoRandomVertices(AdjacencyList[] graph)
         {
             Random rnd = new Random();
-            int randomVertex1 = rnd.Next(0, MAX_VERTICES - 1);
-            vertices[randomVertex1].Background = Brushes.LightGreen;
-            int randomVertex2;
+            int from = rnd.Next(0, MAX_VERTICES - 1);
+            vertices[from].Background = Brushes.LightGreen;
+            int where;
             do
             {
-                randomVertex2 = rnd.Next(0, MAX_VERTICES - 1);
-            } while (randomVertex2 == randomVertex1);
+                where = rnd.Next(0, MAX_VERTICES - 1);
+            } while (where == from);
             
-            vertices[randomVertex2].Background = Brushes.LightGreen;
+            vertices[where].Background = Brushes.LightGreen;
 
-            result = DjikstraShortestPath.Solve(graph, randomVertex1, randomVertex2, MAX_VERTICES);
+            result = DjikstraShortestPath.Solve(graph, from, where, MAX_VERTICES);
         }
 
         private void AddText(Line l, string text)
