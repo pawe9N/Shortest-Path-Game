@@ -1,4 +1,4 @@
-# Shortest-Path-Game
+# ShortestPathGame
 This app was created for purpose of learning C#, Dijkstra Algorithm and Canvas in WPF.
 
 ## Description of application
