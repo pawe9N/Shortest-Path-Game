@@ -163,7 +163,7 @@ namespace ShortestPathGame.Classes
             
             vertices[where].Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFCC00"));
 
-            result = DjikstraShortestPath.Solve(graph, from, where, MAX_VERTICES, parent);
+            result = DijkstraShortestPath.Solve(graph, from, where, MAX_VERTICES, parent);
         }
 
         public void ColorPath()

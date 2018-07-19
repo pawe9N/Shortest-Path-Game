@@ -2,7 +2,7 @@
 
 namespace ShortestPathGame.Classes
 {
-    class DjikstraShortestPath
+    class DijkstraShortestPath
     {
         public static int Solve(AdjacencyList[] graph, int from, int where, int numberOfVertices, int[] parent)
         {
