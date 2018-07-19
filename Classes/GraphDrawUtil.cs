@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -22,8 +23,10 @@ namespace ShortestPathGame.Classes
         private Border[] vertices;
         private Line[] lines;
         private AdjacencyList[] graph;
-        private string[] lineText;
         private int[] weights;
+        private Stack<int> path;
+        private int[] parent;
+        private int from, where;
 
         private int amountOfVertices;
         private int amountOfLines;
@@ -33,7 +36,7 @@ namespace ShortestPathGame.Classes
         {
             this.myCanvas = myCanvas;
 
-            switch(level)
+            switch (level)
             {
                 case 1: Initialize(3, 3, 220, 160); break;
                 case 2: Initialize(4, 3, 120, 170); break;
@@ -42,12 +45,11 @@ namespace ShortestPathGame.Classes
                 case 5: Initialize(5, 4, 140, 120); break;
             }
 
-            MakeAndDrawGraph();         
+            MakeAndDrawGraph();
         }
         
         private void Initialize(int VERTICES_IN_ROW, int ROWS_OF_VERTICES, int MARGIN_LEFT, int PADDING_LEFT)
-        {
-            
+        {         
             this.VERTICES_IN_ROW = VERTICES_IN_ROW;
             this.ROWS_OF_VERTICES = ROWS_OF_VERTICES;
             this.MARGIN_LEFT = MARGIN_LEFT;
@@ -58,9 +60,10 @@ namespace ShortestPathGame.Classes
             points = new Point[MAX_VERTICES];
             vertices = new Border[MAX_VERTICES];
             lines = new Line[MAX_LINES];
-            lineText = new string[MAX_LINES];
             graph = new AdjacencyList[MAX_VERTICES];
             weights = new int[MAX_LINES];
+            path = new Stack<int>();
+            parent = new int[MAX_VERTICES];
 
             amountOfVertices = 0;
             amountOfLines = 0;
@@ -105,7 +108,7 @@ namespace ShortestPathGame.Classes
                 symbol++;
             }
 
-            ChangeColorOfTwoRandomVertices(graph);
+            InitializeDjikstraAlgorithmWithRandomVerticles(graph);
 
             for (int i = lines.Length - 1; i >= 0; i--)
             {
@@ -131,21 +134,28 @@ namespace ShortestPathGame.Classes
             amountOfLines++;
         }
 
-        private void ChangeColor(Line l, int c1, int c2)
+        private void ChangeColor(int c1, int c2)
         {
-            l.Stroke = new SolidColorBrush(Colors.LightGreen);
-            vertices[c1].Background = Brushes.LightGreen;
-            TextBlock tb = (TextBlock)vertices[c1].Child;
-            tb.Foreground = Brushes.Black;
-            vertices[c2].Background = Brushes.LightGreen;
+            //l.Stroke = new SolidColorBrush(Colors.LightGreen);
+
+            foreach(Line line in lines)
+            {
+                if((points[c1].X+15 == line.X1 && points[c1].Y+15 == line.Y1 && points[c2].X + 15 == line.X2 && points[c2].Y + 15 == line.Y2)
+                    || (points[c1].X + 15 == line.X2 && points[c1].Y + 15 == line.Y2 && points[c2].X + 15 == line.X1 && points[c2].Y + 15 == line.Y1))
+                {
+                    line.Stroke = new SolidColorBrush(Colors.Blue);
+                }
+            }
+
+            vertices[c1].Background = Brushes.Blue;
+            vertices[c2].Background = Brushes.Blue;
         }
 
-        private void ChangeColorOfTwoRandomVertices(AdjacencyList[] graph)
+        private void InitializeDjikstraAlgorithmWithRandomVerticles(AdjacencyList[] graph)
         {
             Random rnd = new Random();
-            int from = rnd.Next(0, MAX_VERTICES - 1);
+            from = rnd.Next(0, MAX_VERTICES - 1);
             vertices[from].Background = Brushes.LightGreen;
-            int where;
             do
             {
                 where = rnd.Next(0, MAX_VERTICES - 1);
@@ -153,7 +163,38 @@ namespace ShortestPathGame.Classes
             
             vertices[where].Background = Brushes.LightGreen;
 
-            result = DjikstraShortestPath.Solve(graph, from, where, MAX_VERTICES);
+            result = DjikstraShortestPath.Solve(graph, from, where, MAX_VERTICES, parent);
+        }
+
+        public void ColorPath()
+        {
+            if (parent[from] == -1)
+            {
+                GetPath(parent, where, path);
+                ColorVertices(path, path.Pop());
+            }
+        }
+
+        private void GetPath(int [] parent, int j, Stack<int> path)
+        {
+            if (parent[j] == -1)
+            {
+                path.Push(j);
+                return;
+            }
+
+            GetPath(parent, parent[j], path);
+
+            path.Push(j);
+        }
+
+        private void ColorVertices(Stack<int> path, int i)
+        {
+            while(path.Count != 0)
+            {
+                ChangeColor(i, path.Peek());
+                ColorVertices(path, path.Pop());
+            }
         }
 
         private void AddText(Line l, string text)

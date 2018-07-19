@@ -4,12 +4,13 @@ namespace ShortestPathGame.Classes
 {
     class DjikstraShortestPath
     {
-        public static int Solve(AdjacencyList[] graph, int from, int where, int numberOfVertices)
+        public static int Solve(AdjacencyList[] graph, int from, int where, int numberOfVertices, int[] parent)
         {
             int[] shortestDistances = new int[numberOfVertices];
             bool[] coveredVertices = new bool[numberOfVertices];
 
             MinHeap heap = new MinHeap(numberOfVertices);
+            parent[from] = -1;
 
             for (int i = 0; i < numberOfVertices; i++)
             {
@@ -39,6 +40,7 @@ namespace ShortestPathGame.Classes
                     if (!coveredVertices[tempList.where]
                      && shortestDistances[minimumIndex] + tempList.weight < shortestDistances[tempList.where])
                     {
+                        parent[tempList.where] = minimumIndex;
                         shortestDistances[tempList.where] = shortestDistances[minimumIndex] + tempList.weight;
                         heap.Add(tempList.where, shortestDistances[tempList.where]);
                     }

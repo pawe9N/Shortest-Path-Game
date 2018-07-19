@@ -15,11 +15,11 @@
         </Grid>
         <Grid Width="800" Height="200" VerticalAlignment="Bottom">
             <Line X1="0" X2="800" Height="10" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-            <TextBox Name="Answer" Width="400" Height="40" VerticalAlignment="Top" Margin="200,30,200,0" BorderBrush="Black" BorderThickness="1" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
-            <Button Name="Check" Width="50" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 30, 120,0" Content="?" FontSize="25" Click="Check_Click" Grid.Column="1"/>
-            <TextBlock Name="AnserChecker" Width="31" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,60,0" Text="" FontSize="30"  FontWeight="Bold" Grid.Column="1"/>
+            <TextBox Name="Answer" Width="400" Height="40" VerticalAlignment="Top" Margin="200,30,200,0" BorderBrush="Black" BorderThickness="1" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" KeyDown="Check_KeyDown"/>
+            <Button Name="Check" Width="50" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 30, 120,0" Content="?" FontSize="25" Click="Check_Click"/>
+            <TextBlock Name="AnserChecker" Width="31" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,60,0" Text="" FontSize="30"  FontWeight="Bold"/>
             <TextBlock Name="Result" Text="Result:" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 10,0,0" FontSize="30" FontWeight="Bold"/>
-            <Button Name="Next" Content="NEXT" Width="200" Height="40" VerticalAlignment="Bottom" Margin="0,0,0,20" FontSize="20" Click="Next_Click" Grid.ColumnSpan="2"/>
+            <Button Name="Next" Content="NEXT" Width="200" Height="40" VerticalAlignment="Bottom" Margin="0,0,0,20" FontSize="20" Click="Next_Click"/>
         </Grid>
     </StackPanel>
 </Window>

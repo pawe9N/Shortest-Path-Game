@@ -1,6 +1,7 @@
 ﻿using ShortestPathGame.Classes;
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ShortestPathGame
 {
@@ -22,10 +23,12 @@ namespace ShortestPathGame
             result = util.result;
             Points.Text = $"Points: {points}";
             Next.IsEnabled = false;
+            Answer.Focus();
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            Answer.Focus();
             Check.IsEnabled = true;
             Next.IsEnabled = false;
             AnserChecker.Text = "";
@@ -48,6 +51,7 @@ namespace ShortestPathGame
         {
             if(Answer.Text != "" && result == Convert.ToInt32(Answer.Text))
             {
+                util.ColorPath();
                 AnserChecker.Text = ":)";
                 Result.Text = result.ToString();
                 Answer.Text = "";
@@ -55,12 +59,21 @@ namespace ShortestPathGame
                 Points.Text = $"Points: {points}";
                 Check.IsEnabled = false;
                 Next.IsEnabled = true;
+                Next.Focus();
             }
             else
             {
                 points -= 10;
                 AnserChecker.Text = ":(";
                 Points.Text = $"Points: {points}";
+            }
+        }
+
+        private void Check_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Return && Check.IsEnabled)
+            {
+                Check_Click(sender, e);
             }
         }
     }
