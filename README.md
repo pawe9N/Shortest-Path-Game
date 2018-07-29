@@ -11,5 +11,5 @@ If you want to use this program, you have to download package from release tab a
 - normal gameplay
 <img src="https://i.imgur.com/MrNy0tB.gif">
 
-- what happens if the player enter strange answer?
+- what happens if the player enters strange answer?
 <img src="https://i.imgur.com/jS3yW2s.gif">
